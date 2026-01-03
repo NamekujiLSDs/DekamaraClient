@@ -1,14 +1,19 @@
-//ライブラリの読みこみ
-const { BrowserView, BrowserWindow, app, ipcMain } = require('electron');
-const { Store } = require('electron-store');
-const log = require('electron-log');
-const shortcut = require('electron-localshortcut');
-const fs = require('fs');
-const path = require('path');
+require("v8-compile-cache");
+
+const { app, ipcMain, Menu, protocol, BrowserWindow, dialog, } = require("electron");
+const path = require("path");
+const { autoUpdater } = require("electron-updater");
+const localShortcut = require("electron-localshortcut");
+const log = require("electron-log");
+const store = require("electron-store");
+const fs = require("fs");
 
 //使用するウィンドウの作成
 let splashWindow, gameWindow
 let appVersion = app.getVersion()
+
+// DevMode
+autoUpdater.forceDevUpdateConfig = true;
 
 //スプラッシュウィンドウの作成
 const createSplash = () => {
@@ -17,14 +22,15 @@ const createSplash = () => {
         width: 800,
         height: 450,
         frame: false,
+        icon: path.join(__dirname, "./src/img/icon.ico"),
         resizable: false,
         alwaysOnTop: true,
         webPreferences: {
-            preload: path.join(__dirname, './assets/js/splash-preload.js')
+            preload: path.join(__dirname, './src/js/splash-preload.js')
         }
     })
     //スプラッシュの表示
-    splashWindow.loadFile(path.join(__dirname, './assets/html/splash.html'))
+    splashWindow.loadFile(path.join(__dirname, './src/html/splash.html'))
     // splashWindow.toggleDevTools()
     //自動アップデート機能はここから
     const update = async () => {
@@ -84,7 +90,73 @@ const createSplash = () => {
         update()
     })
 }
+const createGame = () => {
+    gameWindow = new BrowserWindow({
+        height: 800,
+        show: false,
+        width: 1000,
+        icon: path.join(__dirname, "./src/img/icon.ico"),
+        fullscreen: true,
+        webPreferences: {
+            preload: path.join(__dirname, "./src/js/game-preload.js")
+        }
+    })
+    gameWindow.loadURL("https://kirka.io/")
+    // ショートカットキーの設定
+    localShortcut.register(gameWindow, "F5", () => {
+        gameWindow.reload();
+    });
+    localShortcut.register(gameWindow, "Esc", () => {
+        gameWindow.webContents.send("shortcutKey", "ESC");
+    });
+    localShortcut.register(gameWindow, "F11", () => {
+        const isFullScreen = gameWindow.isFullScreen();
+        gameWindow.setFullScreen(!isFullScreen);
+    });
 
+    gameWindow.on("ready-to-show", () => {
+        splashWindow.destroy()
+        gameWindow.show()
+    })
+};
+app.commandLine.appendSwitch("disable-breakpad");
+app.commandLine.appendSwitch("disable-print-preview");
+app.commandLine.appendSwitch("disable-metrics-repo");
+app.commandLine.appendSwitch("disable-metrics");
+app.commandLine.appendSwitch("disable-2d-canvas-clip-aa");
+app.commandLine.appendSwitch("disable-bundled-ppapi-flash");
+app.commandLine.appendSwitch("disable-logging");
+app.commandLine.appendSwitch("disable-hang-monitor");
+app.commandLine.appendSwitch("disable-component-update");
+app.commandLine.appendSwitch("enable-javascript-harmony");
+app.commandLine.appendSwitch("enable-future-v8-vm-features");
+// app.commandLine.appendSwitch("enable-webgl");
+// app.commandLine.appendSwitch("enable-webgl2-compute-context");
+app.commandLine.appendSwitch("disable-background-timer-throttling");
+app.commandLine.appendSwitch("disable-renderer-backgrounding");
+app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
+// app.commandLine.appendSwitch("disable-gpu");
+app.commandLine.appendSwitch("disable-software-rasterizer");
+// app.commandLine.appendSwitch("disable-gpu-compositing");
+// app.commandLine.appendSwitch("disable-accelerated-2d-canvas");
+// app.commandLine.appendSwitch("enable-webgl2-compute-context");
+app.commandLine.appendSwitch("enable-highres-timer");
+app.commandLine.appendSwitch("enable-quic");
+// app.commandLine.appendSwitch("enable-accelerated-2d-canvas");
+app.commandLine.appendSwitch("renderer-process-limit", "100");
+app.commandLine.appendSwitch("max-active-webgl-contexts", "100");
+app.commandLine.appendSwitch("webrtc-max-cpu-consumption-percentage", "100",);
+app.commandLine.appendSwitch("ignore-gpu-blacklist");
+app.commandLine.appendSwitch("enable-gpu-rasterization");
+app.commandLine.appendSwitch("enable-oop-rasterization");
+app.commandLine.appendSwitch("disable-zero-copy");
+app.commandLine.appendSwitch("disable-low-end-device-mode");
+app.commandLine.appendSwitch("enable-accelerated-video-decode");
+app.commandLine.appendSwitch("enable-native-gpu-memory-buffers");
+app.commandLine.appendSwitch("high-dpi-support", "1");
+app.commandLine.appendSwitch("ignore-gpu-blacklist");
+app.commandLine.appendSwitch("no-pings");
+app.commandLine.appendSwitch("no-proxy-server");
 
 app.on('ready', () => {
     createSplash();

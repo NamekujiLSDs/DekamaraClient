@@ -12,15 +12,13 @@ This software is an **unofficial** client for kirka.io.
 **Use at your own risk.**
 The developer is not responsible for any damages caused by using this software, including but not limited to account suspension or data loss.
 
-This client may violate the kirka.io Terms of Service (ToS). Please check the ToS yourself before using this software.
-
 ---
 
 ## ✨ Features
 
 * **Unlimited FPS:** Uncaps your framerate for smoother gameplay.
 * **CSS Loader:** Load custom CSS files to change the game's appearance.
-* **UserScript Loader:** Load custom UserScript (`.js`) files to add new functionality.
+* **UserScript Loader:** Load custom UserScript (`.user.js`) files to add new functionality.(WIP)
 * **Performance Optimizations:** Aims to provide a smoother gameplay experience.
 * **Resource Swapper:** Allows you to replace in-game resources (e.g., textures, sounds).
 * **Helpful Hotkeys:** See the "Usage" section below.

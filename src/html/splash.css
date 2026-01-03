@@ -1,7 +1,31 @@
 body {
     width: 800px;
     height: 450px;
-    background: red;
+    background: radial-gradient(#222, black);
     padding: unset;
     margin: unset
+}
+
+#bgImg {
+    height: fit-content;
+    width: fit-content;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+
+#version,
+#stat {
+    color: #888;
+    position: fixed;
+    bottom: 5px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#version {
+    right: 10px;
+}
+
+#stat {
+    left: 10px;
 }
