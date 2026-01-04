@@ -113,6 +113,9 @@ const createGame = () => {
         const isFullScreen = gameWindow.isFullScreen();
         gameWindow.setFullScreen(!isFullScreen);
     });
+    localShortcut.register(gameWindow, "F12", () => {
+        gameWindow.webContents.openDevTools();
+    });
     gameWindow.setTitle("DEKAMARA CLIENT");
     gameWindow.on("page-title-updated", (e) => {
         e.preventDefault();
