@@ -126,6 +126,7 @@ const createGame = () => {
 
     Menu.setApplicationMenu(null);
 };
+app.commandLine.appendSwitch("in-process-gpu", true)
 app.commandLine.appendSwitch("disable-frame-rate-limit")
 app.commandLine.appendSwitch("disable-breakpad");
 app.commandLine.appendSwitch("disable-print-preview");
