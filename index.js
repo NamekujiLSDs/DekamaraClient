@@ -113,12 +113,17 @@ const createGame = () => {
         const isFullScreen = gameWindow.isFullScreen();
         gameWindow.setFullScreen(!isFullScreen);
     });
-
-    gameWindow.on("ready-to-show", () => {
+    gameWindow.setTitle("DEKAMARA CLIENT");
+    gameWindow.on("page-title-updated", (e) => {
+        e.preventDefault();
+    }); gameWindow.on("ready-to-show", () => {
         splashWindow.destroy()
         gameWindow.show()
     })
+
+    Menu.setApplicationMenu(null);
 };
+app.commandLine.appendSwitch("disable-frame-rate-limit")
 app.commandLine.appendSwitch("disable-breakpad");
 app.commandLine.appendSwitch("disable-print-preview");
 app.commandLine.appendSwitch("disable-metrics-repo");
@@ -130,19 +135,12 @@ app.commandLine.appendSwitch("disable-hang-monitor");
 app.commandLine.appendSwitch("disable-component-update");
 app.commandLine.appendSwitch("enable-javascript-harmony");
 app.commandLine.appendSwitch("enable-future-v8-vm-features");
-// app.commandLine.appendSwitch("enable-webgl");
-// app.commandLine.appendSwitch("enable-webgl2-compute-context");
 app.commandLine.appendSwitch("disable-background-timer-throttling");
 app.commandLine.appendSwitch("disable-renderer-backgrounding");
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
-// app.commandLine.appendSwitch("disable-gpu");
 app.commandLine.appendSwitch("disable-software-rasterizer");
-// app.commandLine.appendSwitch("disable-gpu-compositing");
-// app.commandLine.appendSwitch("disable-accelerated-2d-canvas");
-// app.commandLine.appendSwitch("enable-webgl2-compute-context");
 app.commandLine.appendSwitch("enable-highres-timer");
 app.commandLine.appendSwitch("enable-quic");
-// app.commandLine.appendSwitch("enable-accelerated-2d-canvas");
 app.commandLine.appendSwitch("renderer-process-limit", "100");
 app.commandLine.appendSwitch("max-active-webgl-contexts", "100");
 app.commandLine.appendSwitch("webrtc-max-cpu-consumption-percentage", "100",);
